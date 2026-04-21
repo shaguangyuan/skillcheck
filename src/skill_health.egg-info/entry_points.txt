@@ -1,2 +1,0 @@
-[console_scripts]
-skill-health = skill_health.cli:main
