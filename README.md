@@ -296,6 +296,12 @@ flowchart LR
 
 The plugin layer is best used for installation and collection setup. Hooks are best used to supplement the official activation event with downstream toolchain behavior after a skill has been triggered.
 
+python -m pip install -e .
+skill-health init
+skill-health refresh
+skill-health summary
+skill-health summary --format json
+skill-health dashboard
 ## Roadmap
 
 | Phase | Focus |
