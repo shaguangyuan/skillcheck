@@ -86,6 +86,64 @@ skill-health aggregate
 
 The `skill-health dashboard` command rebuilds aggregates before serving.
 
+## Detailed usage guide
+
+Use this if you want a practical "I just installed it, now what?" flow.
+
+1. Install and initialize local storage:
+
+```bash
+python -m pip install -e .
+skill-health init
+```
+
+2. Refresh local data and run diagnostics in one command:
+
+```bash
+skill-health refresh
+```
+
+3. Read result directly in terminal (no browser needed):
+
+```bash
+skill-health summary
+skill-health summary --format json
+```
+
+4. Open dashboard when you want visual cards and tables:
+
+```bash
+skill-health dashboard
+```
+
+5. Understand status interpretation:
+
+- `Qualified`: healthy skill with enough evidence and no serious risk flags.
+- `Watch`: medium score or low confidence; monitor and refine.
+- `Unqualified`: low score or explicit high-risk/security signals; review first.
+
+Typical maintenance loop:
+
+- Run `skill-health refresh` daily or weekly.
+- Check `skill-health summary --format json` for automation/reporting.
+- Remove or rewrite skills that stay `Unqualified` for multiple cycles.
+- Use `skill-health doctor` when opening GitHub issues.
+
+## CI for contributors
+
+This repository includes GitHub Actions CI at `.github/workflows/ci.yml`.
+
+- Triggers on `push` to `main`, `pull_request` to `main`, and manual run.
+- Runs `pytest` on Python `3.11`, `3.12`, and `3.13`.
+- Installs with `python -m pip install -e ".[dev]"`.
+
+To run the same checks locally:
+
+```bash
+python -m pip install -e ".[dev]"
+pytest -q
+```
+
 ## Target users
 
 Skill Health Dashboard is built for:

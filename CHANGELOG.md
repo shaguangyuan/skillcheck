@@ -6,6 +6,25 @@ _Release notes for Skill Health Dashboard._
 
 ## Unreleased
 
+## v0.1.0 - 2026-04-21
+
+### Added
+
+- Real local skill inventory table and scanner (`skill_inventory`, `skill-health scan skills`)
+- Optional Codex history importer (`skill-health import codex`) using conservative `SKILL.md` load proxies
+- Doctor diagnostics command (`skill-health doctor`)
+- One-command refresh orchestration (`skill-health refresh`)
+- Structured summary output (`skill-health summary --format json`) with default full-skill listing
+- V2 six-dimension health scoring with confidence-aware statuses:
+  - `security_score`
+  - `clarity_score`
+  - `overlap_score`
+  - `stability_score`
+  - `efficiency_score`
+  - `confidence_score`
+- New health categories: `Qualified`, `Watch`, `Unqualified`
+- CI workflow for automated pytest checks on push and pull request
+
 ### MVP implementation
 
 - Python CLI for local setup, demo loading, aggregation, and dashboard start
