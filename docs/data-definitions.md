@@ -1,4 +1,4 @@
-# Skill Health Dashboard Data Definitions
+﻿# Skill Health Dashboard Data Definitions
 
 _Local data model, metric definitions, and scoring rules for Skill Health Dashboard._
 
@@ -335,7 +335,7 @@ Some skills may have zero activations but should still appear in the dashboard i
 MVP behavior:
 
 - Keep activation events and skill inventory separate tables
-- Aggregate and score using `skill_inventory ∪ skill_activation_events`
+- Aggregate and score using `skill_inventory` plus `skill_activation_events`
 - Show installed-but-unused skills with `activation_count = 0` and `last_seen = null`
 - Keep status rule-based and explicit for inactive skills
 

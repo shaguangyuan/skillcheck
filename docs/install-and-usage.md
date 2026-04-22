@@ -69,21 +69,21 @@ The dashboard should create a local database before importing events or showing 
 Recommended command shape:
 
 ```bash
-skill-health init
+skillcheck init
 ```
 
 ## One-command refresh (recommended)
 
 ```bash
-skill-health refresh
+skillcheck refresh
 ```
 
 This command runs:
 
-- `skill-health scan skills`
-- `skill-health import codex`
-- `skill-health aggregate`
-- `skill-health doctor`
+- `skillcheck scan skills`
+- `skillcheck import codex`
+- `skillcheck aggregate`
+- `skillcheck doctor`
 
 Expected result:
 
@@ -96,13 +96,13 @@ Example success message:
 
 ```text
 Local database initialized:
-~/.skill-health/skill-health.sqlite
+~/.skillcheck/skillcheck.sqlite
 ```
 
 ## Scan installed skills
 
 ```bash
-skill-health scan skills
+skillcheck scan skills
 ```
 
 Expected result:
@@ -114,7 +114,7 @@ Expected result:
 ## Import local history (optional)
 
 ```bash
-skill-health import codex
+skillcheck import codex
 ```
 
 Current built-in importer (`codex`) behavior:
@@ -130,7 +130,7 @@ Sample data is optional and should remain clearly separated from real local data
 Recommended command:
 
 ```bash
-skill-health demo load
+skillcheck demo load
 ```
 
 Expected result:
@@ -158,7 +158,7 @@ When that work lands, the collection layer should distinguish between:
 | `claude_code.skill_activated` | Planned primary skill activation signal |
 | Optional plugin setup | Planned installation and collection onboarding |
 | Optional hooks | Planned downstream toolchain behavior after skill activation |
-| Imported logs | Optional local history imports from supported platforms (current: `skill-health import codex`) |
+| Imported logs | Optional local history imports from supported platforms (current: `skillcheck import codex`) |
 | Sample data | Synthetic demo events only |
 
 ## Start the dashboard
@@ -168,7 +168,7 @@ The dashboard should run locally and open in the user's browser.
 Recommended command:
 
 ```bash
-skill-health dashboard
+skillcheck dashboard
 ```
 
 Expected result:
@@ -178,14 +178,14 @@ Skill Health Dashboard is running locally:
 http://localhost:3000
 ```
 
-The dashboard rebuilds aggregates before serving, so `skill-health demo load` followed directly by `skill-health dashboard` also works.
+The dashboard rebuilds aggregates before serving, so `skillcheck demo load` followed directly by `skillcheck dashboard` also works.
 
 ## Doctor diagnostics
 
 Run local diagnostics for issue reports:
 
 ```bash
-skill-health doctor
+skillcheck doctor
 ```
 
 Typical output includes database path, installed skills found, detected session files, imported activations, sample-data state, last aggregate, and dashboard readiness.
@@ -195,7 +195,7 @@ Typical output includes database path, installed skills found, detected session 
 If you want results directly in the terminal (or chat copy/paste), run:
 
 ```bash
-skill-health summary
+skillcheck summary
 ```
 
 This prints installed skill count, scored skill count, six-dimension averages, status breakdown, and top skills in plain text.
@@ -244,7 +244,7 @@ No local database found. Initialize local storage to begin.
 Suggested action:
 
 ```bash
-skill-health init
+skillcheck init
 ```
 
 ### No events
@@ -257,8 +257,8 @@ No skill activation events have been collected yet.
 
 Suggested actions:
 
-- Run `skill-health scan skills`
-- Run `skill-health import codex`
+- Run `skillcheck scan skills`
+- Run `skillcheck import codex`
 - Or load sample data
 
 ### Sample data mode
@@ -271,7 +271,7 @@ You are viewing sample data. These metrics do not represent your local skill usa
 
 Suggested action:
 
-Delete the local database file from the configured local path, then rerun `skill-health init` and load sample data again if needed.
+Delete the local database file from the configured local path, then rerun `skillcheck init` and load sample data again if needed.
 
 ## Troubleshooting
 
@@ -289,10 +289,10 @@ The implementation should document exact paths. Recommended default locations:
 
 | File | Purpose |
 | --- | --- |
-| `~/.skill-health/skill-health.sqlite` | Local SQLite database |
-| `~/.skill-health/config.toml` | Local configuration |
-| `~/.skill-health/logs/` | Local logs |
-| `~/.skill-health/exports/` | Optional local report exports |
+| `~/.skillcheck/skillcheck.sqlite` | Local SQLite database |
+| `~/.skillcheck/config.toml` | Local configuration |
+| `~/.skillcheck/logs/` | Local logs |
+| `~/.skillcheck/exports/` | Optional local report exports |
 
 All paths should be configurable for users who prefer a project-local setup.
 
@@ -313,7 +313,7 @@ Recommended configuration fields:
 Example shape:
 
 ```toml
-database_path = "~/.skill-health/skill-health.sqlite"
+database_path = "~/.skillcheck/skillcheck.sqlite"
 event_source = "claude_code.skill_activated"
 enable_hooks = false
 default_window = "30d"

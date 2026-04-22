@@ -24,6 +24,12 @@ COMMAND_PATTERN = re.compile(
     )
     \s+
     (?:
+        -Path
+        |
+        -LiteralPath
+    )?
+    \s*
+    (?:
         ["'](?P<quoted>[^"']*SKILL\.md)["']
         |
         (?P<plain>\S*SKILL\.md)
@@ -98,6 +104,24 @@ def _safe_parse_dt(value: object) -> datetime | None:
     return parsed.astimezone(timezone.utc)
 
 
+def _timestamp_from_log_row(
+    row: sqlite3.Row,
+    *,
+    scanned_at: datetime,
+) -> datetime:
+    keys = set(row.keys())
+    if "ts" in keys and row["ts"] is not None:
+        seconds = float(row["ts"])
+        if "ts_nanos" in keys and row["ts_nanos"] is not None:
+            seconds += float(row["ts_nanos"]) / 1_000_000_000
+        return datetime.fromtimestamp(seconds, tz=timezone.utc)
+    if "timestamp" in keys:
+        parsed = _safe_parse_dt(row["timestamp"])
+        if parsed is not None:
+            return parsed
+    return scanned_at
+
+
 def _skill_name_from_file(skill_file: Path) -> str:
     try:
         content = skill_file.read_text(encoding="utf-8")
@@ -153,13 +177,18 @@ def _extract_candidates_from_jsonl(session_file: Path) -> list[tuple[int, str, d
     return candidates
 
 
-def _extract_from_logs_sqlite(logs_path: Path) -> list[tuple[str, int, str]]:
-    candidates: list[tuple[str, int, str]] = []
+def _extract_from_logs_sqlite(
+    logs_path: Path,
+    *,
+    scanned_at: datetime,
+) -> list[tuple[str, int, str, datetime]]:
+    candidates: list[tuple[str, int, str, datetime]] = []
     if not logs_path.exists():
         return candidates
 
     try:
         connection = sqlite3.connect(logs_path)
+        connection.row_factory = sqlite3.Row
     except sqlite3.Error:
         return candidates
 
@@ -177,14 +206,26 @@ def _extract_from_logs_sqlite(logs_path: Path) -> list[tuple[str, int, str]]:
             for column in text_columns:
                 try:
                     rows = connection.execute(
-                        f'select rowid, "{column}" from "{table_name}" where lower("{column}") like ?',
+                        f'select rowid as __skillcheck_rowid, * from "{table_name}" where lower("{column}") like ?',
                         ("%skill.md%",),
                     ).fetchall()
                 except sqlite3.Error:
                     continue
-                for rowid, value in rows:
+                for row in rows:
+                    rowid = int(row["__skillcheck_rowid"])
+                    value = row[column]
                     if isinstance(value, str):
-                        candidates.append((table_name, int(rowid), value))
+                        candidates.append(
+                            (
+                                table_name,
+                                rowid,
+                                value,
+                                _timestamp_from_log_row(
+                                    row,
+                                    scanned_at=scanned_at,
+                                ),
+                            )
+                        )
     finally:
         connection.close()
     return candidates
@@ -240,7 +281,10 @@ def import_codex_history(
                 )
             )
 
-    for table_name, rowid, text in _extract_from_logs_sqlite(home / "logs_2.sqlite"):
+    for table_name, rowid, text, occurred_at in _extract_from_logs_sqlite(
+        home / "logs_2.sqlite",
+        scanned_at=scanned_at,
+    ):
         skill_path = _extract_skill_path(text)
         if skill_path is None or not _is_inside_roots(skill_path, roots):
             continue
@@ -253,7 +297,7 @@ def import_codex_history(
                     raw_event_ref=raw_event_ref,
                     skill_id=skill_id,
                 ),
-                _serialize_dt(scanned_at),
+                _serialize_dt(occurred_at),
                 _serialize_dt(scanned_at),
                 skill_id,
                 _skill_name_from_file(skill_path),

@@ -69,10 +69,10 @@ Recommended default paths:
 
 | Path | Purpose |
 | --- | --- |
-| `~/.skill-health/skill-health.sqlite` | Local SQLite database |
-| `~/.skill-health/config.toml` | Local configuration |
-| `~/.skill-health/logs/` | Local logs |
-| `~/.skill-health/exports/` | Optional local exports |
+| `~/.skillcheck/skillcheck.sqlite` | Local SQLite database |
+| `~/.skillcheck/config.toml` | Local configuration |
+| `~/.skillcheck/logs/` | Local logs |
+| `~/.skillcheck/exports/` | Optional local exports |
 
 All paths should be configurable. Users should be able to inspect, back up, or delete these files directly.
 

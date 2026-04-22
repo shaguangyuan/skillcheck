@@ -73,7 +73,7 @@ Expected: FAIL because the `skill_health` package and `build_parser` function do
 
 - [ ] **Step 3: Add package metadata**
 
-Create `pyproject.toml` with setuptools metadata, Python `>=3.11`, optional `dev = ["pytest>=8.0"]`, console script `skill-health = "skill_health.cli:main"`, package discovery under `src`, and pytest `pythonpath = ["src"]`.
+Create `pyproject.toml` with setuptools metadata, Python `>=3.11`, optional `dev = ["pytest>=8.0"]`, console script `skillcheck = "skill_health.cli:main"`, package discovery under `src`, and pytest `pythonpath = ["src"]`.
 
 - [ ] **Step 4: Add minimal package files**
 
@@ -131,7 +131,7 @@ def table_names(db_path):
 
 
 def test_initialize_database_creates_required_tables(tmp_path):
-    db_path = tmp_path / "skill-health.sqlite"
+    db_path = tmp_path / "skillcheck.sqlite"
     initialize_database(db_path)
     assert table_names(db_path) == [
         "skill_activation_events",
@@ -141,7 +141,7 @@ def test_initialize_database_creates_required_tables(tmp_path):
 
 
 def test_initialize_database_is_idempotent(tmp_path):
-    db_path = tmp_path / "skill-health.sqlite"
+    db_path = tmp_path / "skillcheck.sqlite"
     initialize_database(db_path)
     initialize_database(db_path)
     assert table_names(db_path) == [
@@ -168,11 +168,11 @@ from pathlib import Path
 
 
 def default_data_dir() -> Path:
-    return Path.home() / ".skill-health"
+    return Path.home() / ".skillcheck"
 
 
 def default_database_path() -> Path:
-    return default_data_dir() / "skill-health.sqlite"
+    return default_data_dir() / "skillcheck.sqlite"
 ```
 
 - [ ] **Step 4: Add SQLite schema creation**
@@ -185,9 +185,9 @@ Create `src/skill_health/storage.py` with an `initialize_database(db_path)` func
 
 Use the fields defined in `docs/data-definitions.md`.
 
-- [ ] **Step 5: Wire `skill-health init`**
+- [ ] **Step 5: Wire `skillcheck init`**
 
-Modify `src/skill_health/cli.py` so `skill-health init --db <path>` calls `initialize_database()` and prints `Local database initialized: <path>`.
+Modify `src/skill_health/cli.py` so `skillcheck init --db <path>` calls `initialize_database()` and prints `Local database initialized: <path>`.
 
 - [ ] **Step 6: Run storage and CLI tests**
 
@@ -221,7 +221,7 @@ def count_events(db_path):
 
 
 def test_load_demo_data_inserts_synthetic_events(tmp_path):
-    db_path = tmp_path / "skill-health.sqlite"
+    db_path = tmp_path / "skillcheck.sqlite"
     initialize_database(db_path)
     inserted = load_demo_data(db_path)
     assert inserted > 0
@@ -229,7 +229,7 @@ def test_load_demo_data_inserts_synthetic_events(tmp_path):
 
 
 def test_clear_demo_data_removes_sample_events(tmp_path):
-    db_path = tmp_path / "skill-health.sqlite"
+    db_path = tmp_path / "skillcheck.sqlite"
     initialize_database(db_path)
     load_demo_data(db_path)
     removed = clear_demo_data(db_path)
@@ -255,8 +255,8 @@ Create `src/skill_health/demo.py` with:
 
 Modify `src/skill_health/cli.py` so:
 
-- `skill-health demo load --db <path>` initializes the database and loads sample events
-- `skill-health demo clear --db <path>` initializes the database and clears sample events
+- `skillcheck demo load --db <path>` initializes the database and loads sample events
+- `skillcheck demo clear --db <path>` initializes the database and clears sample events
 
 - [ ] **Step 5: Run demo, storage, and CLI tests**
 
@@ -337,7 +337,7 @@ from skill_health.storage import initialize_database
 
 
 def test_rebuild_aggregates_creates_daily_stats_and_scores(tmp_path):
-    db_path = tmp_path / "skill-health.sqlite"
+    db_path = tmp_path / "skillcheck.sqlite"
     initialize_database(db_path)
     load_demo_data(db_path)
     result = rebuild_aggregates(db_path)
@@ -346,7 +346,7 @@ def test_rebuild_aggregates_creates_daily_stats_and_scores(tmp_path):
 
 
 def test_rebuild_aggregates_assigns_expected_demo_statuses(tmp_path):
-    db_path = tmp_path / "skill-health.sqlite"
+    db_path = tmp_path / "skillcheck.sqlite"
     initialize_database(db_path)
     load_demo_data(db_path)
     rebuild_aggregates(db_path)
@@ -376,9 +376,9 @@ Create `src/skill_health/aggregate.py` with:
 - 30-day health scoring grouped by skill
 - JSON-encoded `diagnostic_reasons`
 
-- [ ] **Step 7: Wire `skill-health aggregate`**
+- [ ] **Step 7: Wire `skillcheck aggregate`**
 
-Modify `src/skill_health/cli.py` so `skill-health aggregate --db <path>` initializes storage, rebuilds aggregates, and prints counts.
+Modify `src/skill_health/cli.py` so `skillcheck aggregate --db <path>` initializes storage, rebuilds aggregates, and prints counts.
 
 - [ ] **Step 8: Run aggregation and scoring tests**
 
@@ -409,7 +409,7 @@ from skill_health.storage import initialize_database
 
 
 def test_build_overview_payload_returns_status_counts(tmp_path):
-    db_path = tmp_path / "skill-health.sqlite"
+    db_path = tmp_path / "skillcheck.sqlite"
     initialize_database(db_path)
     load_demo_data(db_path)
     rebuild_aggregates(db_path)
@@ -456,9 +456,9 @@ Create `src/skill_health/dashboard.py` with:
 - `DashboardHandler` serving `/`, `/overview`, and `/api/overview`
 - `serve_dashboard(db_path, host, port)` using `ThreadingHTTPServer`
 
-- [ ] **Step 5: Wire `skill-health dashboard`**
+- [ ] **Step 5: Wire `skillcheck dashboard`**
 
-Modify `src/skill_health/cli.py` so `skill-health dashboard --db <path> --host 127.0.0.1 --port 3000` initializes storage and serves the dashboard.
+Modify `src/skill_health/cli.py` so `skillcheck dashboard --db <path> --host 127.0.0.1 --port 3000` initializes storage and serves the dashboard.
 
 - [ ] **Step 6: Run all tests**
 
@@ -483,10 +483,10 @@ Add a `Quick start` section to `README.md` after the documentation table:
 
 ```bash
 python -m pip install -e ".[dev]"
-skill-health init
-skill-health demo load
-skill-health aggregate
-skill-health dashboard
+skillcheck init
+skillcheck demo load
+skillcheck aggregate
+skillcheck dashboard
 ```
 
 Then open `http://127.0.0.1:3000`.
@@ -498,10 +498,10 @@ In `docs/install-and-usage.md`, replace planned command shapes with the concrete
 
 ```bash
 python -m pip install -e ".[dev]"
-skill-health init
-skill-health demo load
-skill-health aggregate
-skill-health dashboard
+skillcheck init
+skillcheck demo load
+skillcheck aggregate
+skillcheck dashboard
 ```
 
 - [ ] **Step 3: Update changelog**

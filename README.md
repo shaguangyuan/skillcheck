@@ -46,23 +46,25 @@ Skill Health Dashboard is a local-first dashboard for understanding your install
 
 ```bash
 python -m pip install -e .
-skill-health init
-skill-health refresh
-skill-health dashboard
+skillcheck init
+skillcheck refresh
+skillcheck dashboard
 ```
 
-`skill-health refresh` runs `scan skills`, `import codex`, `aggregate`, and `doctor` in sequence.
+`skillcheck` is the primary CLI command. The older `skill-health` command remains as a compatibility alias for now.
+
+`skillcheck refresh` runs `scan skills`, `import codex`, `aggregate`, and `doctor` in sequence.
 
 If you prefer terminal-only output (no dashboard page), run:
 
 ```bash
-skill-health summary
+skillcheck summary
 ```
 
 For structured output:
 
 ```bash
-skill-health summary --format json
+skillcheck summary --format json
 ```
 
 `summary` now defaults to full-skill output and includes action hints about cleanup/replacement decisions.
@@ -71,20 +73,20 @@ Use `--all` when you want to explicitly request full output in scripts.
 If you only want demo data:
 
 ```bash
-skill-health demo load
-skill-health dashboard
+skillcheck demo load
+skillcheck dashboard
 ```
 
 If you want to remove demo rows and switch to real local data:
 
 ```bash
-skill-health demo clear
-skill-health scan skills
-skill-health import codex
-skill-health aggregate
+skillcheck demo clear
+skillcheck scan skills
+skillcheck import codex
+skillcheck aggregate
 ```
 
-The `skill-health dashboard` command rebuilds aggregates before serving.
+The `skillcheck dashboard` command rebuilds aggregates before serving.
 
 ## Detailed usage guide
 
@@ -94,26 +96,26 @@ Use this if you want a practical "I just installed it, now what?" flow.
 
 ```bash
 python -m pip install -e .
-skill-health init
+skillcheck init
 ```
 
 2. Refresh local data and run diagnostics in one command:
 
 ```bash
-skill-health refresh
+skillcheck refresh
 ```
 
 3. Read result directly in terminal (no browser needed):
 
 ```bash
-skill-health summary
-skill-health summary --format json
+skillcheck summary
+skillcheck summary --format json
 ```
 
 4. Open dashboard when you want visual cards and tables:
 
 ```bash
-skill-health dashboard
+skillcheck dashboard
 ```
 
 5. Understand status interpretation:
@@ -124,10 +126,10 @@ skill-health dashboard
 
 Typical maintenance loop:
 
-- Run `skill-health refresh` daily or weekly.
-- Check `skill-health summary --format json` for automation/reporting.
+- Run `skillcheck refresh` daily or weekly.
+- Check `skillcheck summary --format json` for automation/reporting.
 - Remove or rewrite skills that stay `Unqualified` for multiple cycles.
-- Use `skill-health doctor` when opening GitHub issues.
+- Use `skillcheck doctor` when opening GitHub issues.
 
 ## CI for contributors
 
@@ -168,7 +170,7 @@ The MVP focuses on a small set of local-first capabilities:
 | Area | MVP capability |
 | --- | --- |
 | Skill inventory | Scan real installed `SKILL.md` files into `skill_inventory` |
-| Local import | Optionally import local usage proxies via importer commands (current: `skill-health import codex`) |
+| Local import | Optionally import local usage proxies via importer commands (current: `skillcheck import codex`) |
 | Local collection | Capture local skill activation events and related execution context |
 | Local storage | Store raw and aggregated data in a local database |
 | Overview | Show total skills, status cards/counts, top skills, and the sample-data banner |

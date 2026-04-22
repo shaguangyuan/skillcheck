@@ -19,7 +19,7 @@ from skill_health.summary import render_summary_report_json
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="skill-health")
+    parser = argparse.ArgumentParser(prog="skillcheck")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     init_parser = subparsers.add_parser("init", help="Initialize local storage")

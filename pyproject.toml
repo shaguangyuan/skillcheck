@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "skill-health"
+name = "skillcheck"
 version = "0.1.0"
-description = "Local-first Skill Health Dashboard MVP"
+description = "Local-first SkillCheck dashboard for agent skill usage"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
@@ -15,6 +15,7 @@ dependencies = []
 dev = ["pytest>=8.0"]
 
 [project.scripts]
+skillcheck = "skill_health.cli:main"
 skill-health = "skill_health.cli:main"
 
 [tool.setuptools]

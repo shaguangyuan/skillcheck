@@ -22,6 +22,7 @@ def default_skill_roots() -> list[Path]:
     return [
         home / ".codex" / "skills",
         home / ".codex" / "superpowers" / "skills",
+        home / ".codex" / "plugins" / "cache",
         home / ".agents" / "skills",
     ]
 

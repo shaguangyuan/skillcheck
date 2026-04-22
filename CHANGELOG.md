@@ -10,11 +10,11 @@ _Release notes for Skill Health Dashboard._
 
 ### Added
 
-- Real local skill inventory table and scanner (`skill_inventory`, `skill-health scan skills`)
-- Optional Codex history importer (`skill-health import codex`) using conservative `SKILL.md` load proxies
-- Doctor diagnostics command (`skill-health doctor`)
-- One-command refresh orchestration (`skill-health refresh`)
-- Structured summary output (`skill-health summary --format json`) with default full-skill listing
+- Real local skill inventory table and scanner (`skill_inventory`, `skillcheck scan skills`)
+- Optional Codex history importer (`skillcheck import codex`) using conservative `SKILL.md` load proxies
+- Doctor diagnostics command (`skillcheck doctor`)
+- One-command refresh orchestration (`skillcheck refresh`)
+- Structured summary output (`skillcheck summary --format json`) with default full-skill listing
 - V2 six-dimension health scoring with confidence-aware statuses:
   - `security_score`
   - `clarity_score`
