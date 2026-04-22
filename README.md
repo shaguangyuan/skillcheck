@@ -2,6 +2,8 @@
 
 _A local-first open source dashboard for understanding and improving agent skill usage._
 
+![SkillCheck hero showing local skill health analytics](docs/assets/skillcheck-hero.png)
+
 ---
 
 ## Overview
